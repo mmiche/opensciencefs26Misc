@@ -1,0 +1,64 @@
+---
+title: "Gemeinsamkeiten statistischer Tests"
+author: "Marcel Miché"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Zweck dieses kleinen Dokuments
+
+```{r none, echo=FALSE, eval=FALSE}
+# Source: /Users/mmiche/Desktop/TeachingClass/HS2022Masterprojekt/R_Uebung20230712/StatsSimulation20230719.R
+```
+
+
+1. Zeige, dass der zweiseitige (= ungerichtete) t-Test, die Varianzanalyse und die einfache lineare Regression tatsächlich ein und dasselbe sind, nur aus leicht verschiedenen Blickwinkeln betrachtet.
+2. Erkläre, warum Einsichten wie unter Punkt 1 beschrieben, überaus wichtig sind.
+
+```{r simulate}
+# Ziehe 100 Werte von der Normalverteilung, mit Mittelwert 3, Standardabweichung 2.
+set.seed(159)
+group1 <- rnorm(n=100, mean=3, sd=2)
+# Ziehe 100 Werte von der Normalverteilung, mit Mittelwert 4, Standardabweichung 2.
+set.seed(159)
+group2 <- rnorm(n=100, mean=4, sd=2)
+# Erzeuge data.frame
+simulateDf <- data.frame(groups=rep(c("group1", "group2"), times=c(100, 100)),
+                         measured=c(group1, group2))
+```
+
+### Zweiseitiger t-Test
+
+```{r ttest2sided}
+t.test(x=group2, y=group1, alternative = "two.sided", var.equal=TRUE)
+```
+
+**Beachte** das Testergebnis t = 3.427, die Freiheitsgrade 198 und den p-Wert .0007422.
+
+### Varianzanalyse
+
+```{r anova}
+summary(aov(measured ~ groups, data = simulateDf))
+```
+
+**Beachte** den p-Wert der Zeile groups .000742, die Freiheitsgrade der Residuen 198 und den F-Wert der Zeile groups F = 11.74.
+
+### Einfache lineare Regression
+
+```{r simpleLinReg}
+summary(lm(measured ~ groups, data = simulateDf))
+```
+
+**Beachte** die Zeile groupsgroup2 und die Spalte t value = 3.427 und den zugehörigen p-Wert .000742. Der t value ist das Ergebnis aus Estimate/Std. Error, also in diesem Beispiel 1/.2918 = 3.427. **Beachte** zudem die unterste Zeile der Ausgabe (F-statistic: 11.74 on 1 and 198 DF) und vergleiche mit dem Ergebnis der Varianzanalyse (F = 11.74).
+
+**Notiz**: Die Werte sind je nach Ausgabe auf unterschiedlich viele Stellen gerundet. Es sind identische Ergebnisse, gerade weil die Quelle dieser statistischen Tests ein und dieselbe ist.
+
+## Warum sind diese Einsichten wichtig?
+
+Statistische Tests werden meist unzusammenhängend im Studium "gelehrt". Tatsächlich werden sie in den meisten Fällen nicht gelehrt, sondern vorgeführt, während die Studierenden versuchen Schritt zu halten, was den wenigsten gelingt. Das heisst, dass die meisten Studierenden unter steter Anspannung irgendwie versuchen, sich diese scheinbar so verschiedenen statistischen Tests durch Imitation anzueignen. Diese Art des "Lernens" ist kein Lernen (= kein Aneignen), sondern eher vergleichbar mit einem bulimischen Konsumieren bzw. einem blinden Vollstopfen.
+
+Würde in der Lehre darauf geachtet werden, dass Studierende erkennen, dass es eine gemeinsame Quelle mehrerer statistischer Tests gibt, so würden zumindest manche Studierende vielleicht überrascht sein und etwas mehr darüber erfahren wollen. Bestenfalls würde dadurch unter anderem erreicht werden, dass Studierende wissen wollen, warum es unterschiedliche Blickwinkel gibt, warum und für wen diese Blickwinkel wichtig sind. Das Suchen nach Antworten auf solche Fragen könnte die Studierenden sehr viel näher an den elementaren Zweck statistischer Tests führen. **Dieser elementare Zweck lautet nicht "Was ist das Ergebnis?" sondern "Warum ist gerade dieses Ergebnis zustande gekommen, hat es irgendeine praktische Bedeutung?" Eine Antwort auf die erste Frage ist meist mit dem Ergebnisoutput erledigt. Antworten auf die tiefergehenden Fragen nehmen den Ergebnisoutput nicht als Ende ins Visier, sondern als Anfang. Dann ginge es nämlich um die wesentlich wichtigere Frage nach der Gültigkeit, Robustheit und Tauglichkeit des Ergebnisses.** Im ersten Fall gibt man sich mit dem äusserlichen Anschein zufrieden (stat. signifikant), im zweiten Fall nicht. Der zweite Fall würde "Wissenschaft" bedeuten, der erste Fall nicht bzw. nicht ernsthaft.
