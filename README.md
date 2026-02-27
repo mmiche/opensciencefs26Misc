@@ -26,5 +26,8 @@ Anleitung, um Tab-separierten Code direct als Webseite anzeigen zu lassen:
 
 1. Lege Ordner docs an.
 2. Lege Dateien index.rmd und index.html in docs Ordner.
-3. Auf GitHub website, im Repository, klicke Settings, dann Pages, dann ändere zu "main" und "docs".
+3. Auf GitHub website, im Repository, klicke auf Settings, dann Pages, dann bei 'Build and deployment' und dort bei Branch, ändere in Dropdown-Menü zu "main" und rechts daneben zu "docs".
 4. Warte bis die Webseite eingerichtet worden ist (kann einige Minuten dauern).
+5. Wenn fertig, sieht es so aus:
+
+https://mmiche.github.io/opensciencefs26Misc/
