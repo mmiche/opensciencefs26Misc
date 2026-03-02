@@ -47,6 +47,17 @@ summary(aov(measured ~ groups, data = simulateDf))
 
 **Beachte** den p-Wert der Zeile groups .000742, die Freiheitsgrade der Residuen 198 und den F-Wert der Zeile groups F = 11.74.
 
+```{r anova viz}
+library(ggplot2)
+# install.packages("ggbeeswarm")
+library(ggbeeswarm)
+# https://visualstats.bryer.org/anova.html
+ggplot(simulateDf, aes(x = groups, y = measured)) +
+    geom_boxplot() + 
+    geom_beeswarm(aes(color = groups)) + 
+    theme_bw() + theme(legend.position = 'none')
+```
+
 ### Einfache lineare Regression
 
 ```{r simpleLinReg}
